@@ -26,7 +26,7 @@ internal sealed unsafe class PartyPanelWindow : Window
     internal bool RequestedOpen { get; private set; } = true;
 
     internal PartyPanelWindow(MainWindow mainWindow, MultiplayerManager mp)
-        : base("###AnoMechPartyPanel")
+        : base("###AnoMechForkPartyPanel")
     {
         this.mainWindow = mainWindow;
         this.mp = mp;

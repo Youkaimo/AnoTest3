@@ -66,7 +66,7 @@ internal sealed class DamageDebugWindow : Window, IDisposable
     private AoeQuery? lastRecordedQuery;
 
     public DamageDebugWindow(Plugin plugin)
-        : base("Damage Debug##AnoMechDamageDebug")
+        : base("Damage Debug##AnoMechForkDamageDebug")
     {
         this.plugin = plugin;
         IsOpen = false;

@@ -463,7 +463,7 @@ internal sealed class MultiplayerUi
         scenario.DrawMultiplayerSettings();
     }
 
-    private const string MechanicsPopupId = "Mechanics###AnoMechAssignMechanics";
+    private const string MechanicsPopupId = "Mechanics###AnoMechForkAssignMechanics";
 
     // The mechanic a given player carries (a number, an Accretion, a tether) is a different
     // question from the fight-wide rolls, so it gets its own dialog.

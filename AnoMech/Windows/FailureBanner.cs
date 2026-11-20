@@ -20,7 +20,7 @@ internal sealed class FailureBanner : Window, IDisposable
     private DateTime shownAt;
 
     public FailureBanner()
-        : base("##AnoMechFailureBanner",
+        : base("##AnoMechForkFailureBanner",
             ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoBackground
             | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoFocusOnAppearing
             | ImGuiWindowFlags.NoNav | ImGuiWindowFlags.AlwaysAutoResize)

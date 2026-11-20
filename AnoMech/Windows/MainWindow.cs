@@ -105,11 +105,11 @@ public unsafe class MainWindow : Window, IDisposable
     {
         var v = Assembly.GetExecutingAssembly().GetName().Version;
         var version = v is null ? "" : $" v{v.Major}.{v.Minor}.{v.Build}.{v.Revision}";
-        return $"AnoMech{version}";
+        return $"AnoMech (Youkaimo Fork){version}";
     }
 
     // The title bar still shows while the window is collapsed for the run.
-    private static string Title(bool failed) => $"{TitleText}{(failed ? " — Failed" : "")}###MainWindow";
+    private static string Title(bool failed) => $"{TitleText}{(failed ? " — Failed" : "")}###AnoMechForkMainWindow";
 
     public MainWindow(Plugin plugin)
         : base(Title(failed: false))
@@ -144,7 +144,7 @@ public unsafe class MainWindow : Window, IDisposable
         };
         TitleBarButtons.Add(autoCollapseButton);
 
-        // Small gear opens the settings window (same toggle as /anomech config).
+        // Small gear opens the settings window (same toggle as /anomechfork config).
         TitleBarButtons.Add(new TitleBarButton
         {
             Icon = FontAwesomeIcon.Cog,

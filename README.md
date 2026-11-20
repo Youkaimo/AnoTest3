@@ -5,7 +5,7 @@
 
 ---
  
-Simulate FFXIV raid mechanics client-side for solo practice. Go to any Inn, open the plugin with `/anomech` and start practicing!
+Simulate FFXIV raid mechanics client-side for solo practice. Go to any Inn, open the plugin with `/anomechfork` and start practicing!
 
 Thanks to improvemnts by [WorstAquaPlayer](https://github.com/WorstAquaPlayer) plugin is quite stable now! No more 
 crashes after training session.
@@ -23,7 +23,9 @@ While simulating:
 
 ## Installation
 
-See: https://github.com/anomek/MyDalamudPlugins
+Add this custom repository in Dalamud Settings → Experimental:
+
+https://raw.githubusercontent.com/Youkaimo/MyDalamudPlugins/master/pluginmaster.json
 
 ## Beta: Advanced Simulation Resolution
 

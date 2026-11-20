@@ -14,7 +14,7 @@ internal sealed unsafe class ScenarioPanelWindow : Window
     internal float NaturalHeight { get; private set; }
 
     internal ScenarioPanelWindow(MainWindow mainWindow)
-        : base("###AnoMechScenarioPanel")
+        : base("###AnoMechForkScenarioPanel")
     {
         this.mainWindow = mainWindow;
         Flags = ImGuiWindowFlags.NoTitleBar

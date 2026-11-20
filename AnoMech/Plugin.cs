@@ -42,8 +42,8 @@ public sealed class Plugin : IAsyncDalamudPlugin
     [PluginService] internal static ICondition Condition { get; private set; } = null!;
     [PluginService] internal static IGameConfig GameConfig { get; private set; } = null!;
 
-    private const string CommandName = "/anomech";
-    private const string CommandAlias = "/ano";
+    private const string CommandName = "/anomechfork";
+    private const string CommandAlias = "/anofork";
     private bool commandsRegistered;
 
     internal static Configuration Config { get; private set; } = null!;
@@ -52,7 +52,7 @@ public sealed class Plugin : IAsyncDalamudPlugin
     internal static MultiplayerManager Multiplayer { get; private set; } = null!;
     internal RunController Runs { get; private set; } = null!;
 
-    private readonly WindowSystem windowSystem = new("AnoMech");
+    private readonly WindowSystem windowSystem = new("AnoMechFork");
 
     // Plugin-lifetime singletons, static like the PluginServices above so sim code reaches them
     // without a Plugin reference.
@@ -103,11 +103,11 @@ public sealed class Plugin : IAsyncDalamudPlugin
 
             CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
-                HelpMessage = "Open AnoMech. Subcommands: config, mp, start, reset, leave"
+                HelpMessage = "Open AnoMech (Youkaimo Fork). Subcommands: config, mp, start, reset, leave"
             });
             CommandManager.AddHandler(CommandAlias, new CommandInfo(OnCommand)
             {
-                HelpMessage = "Alias for /anomech"
+                HelpMessage = "Alias for /anomechfork"
             });
             commandsRegistered = true;
 

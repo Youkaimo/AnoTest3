@@ -20,8 +20,10 @@ jobs:
   build:
     uses: Youkaimo/MyDalamudPlugins/.github/workflows/build-plugin.yml@master
     with:
-      internal_name: AnoMech
+      internal_name: AnoMechFork
       solution_name: AnoMech
       version_bump: ${{ inputs.version_bump }}
+      csproj_path: AnoMech/AnoMech.csproj
+      release_dir: AnoMech/bin/x64/Release/AnoMechFork
     secrets:
       PAT: ${{ secrets.PAT }}
