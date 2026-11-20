@@ -37,7 +37,9 @@ public sealed class FruP2LightRampantManaAi : IScenarioAi<FruP2LightRampantState
         ai.Move(HammerAt(HammerWaves - 1) + 0.05f,
             () => ByRole(role => state.BaitsHammer(role) ? GroupSpot(role) : null),
             arrivalTime: PowerfulLightAt);
-        ai.Move(19.1f, () => ByRole(role => state.BaitsHammer(role) ? null : GroupSpot(role)),
+        ai.Move(19.1f, () => ByRole(role => state.BaitsHammer(role) ? null : TowerExitSpot(role)),
+            arrivalTime: 20.4f);
+        ai.Move(20.45f, () => ByRole(role => state.BaitsHammer(role) ? null : GroupSpot(role)),
             arrivalTime: 22.3f);
         ai.Move(PowerfulLightAt + 0.05f, () => ByRole(role => OrbSafeSpot(role, first: true)),
             jitter: 0f, arrivalTime: 27.1f);
@@ -73,15 +75,15 @@ public sealed class FruP2LightRampantManaAi : IScenarioAi<FruP2LightRampantState
         return (northBait, wave) switch
         {
             (true, 0) => FromSim(-7, -7),
-            (true, 1) => FromSim(0, -24),
-            (true, 2) => FromSim(0, -42),
-            (true, 3) => FromSim(19, -38),
-            (true, _) => FromSim(19, -12),
+            (true, 1) => FromSim(-18, -18),
+            (true, 2) => FromSim(-5, -30),
+            (true, 3) => FromSim(12, -30),
+            (true, _) => FromSim(25, -18),
             (false, 0) => FromSim(7, 7),
-            (false, 1) => FromSim(0, 24),
-            (false, 2) => FromSim(0, 42),
-            (false, 3) => FromSim(-19, 38),
-            _ => FromSim(-19, 12),
+            (false, 1) => FromSim(18, 18),
+            (false, 2) => FromSim(5, 30),
+            (false, 3) => FromSim(-12, 30),
+            _ => FromSim(-25, 18),
         };
     }
 
@@ -89,6 +91,13 @@ public sealed class FruP2LightRampantManaAi : IScenarioAi<FruP2LightRampantState
 
     private Vector3? GroupSpot(PartyRole role)
         => NorthGroup(role) ? FromSim(43, 10.8f) : FromSim(-43, -10.8f);
+
+    private Vector3? TowerExitSpot(PartyRole role) => state.Index(role) switch
+    {
+        2 => FromSim(30, 35),
+        3 => FromSim(-30, -35),
+        _ => GroupSpot(role),
+    };
 
     private bool NorthGroup(PartyRole role) => state.NorthGroup(role);
 

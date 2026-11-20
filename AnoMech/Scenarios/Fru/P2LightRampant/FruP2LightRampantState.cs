@@ -11,9 +11,8 @@ namespace AnoMech.Scenarios.Fru.P2LightRampant;
 // them neighbours on the loop marked for Powerful Light; two waves of orbs, north or south first;
 // Banish as pairs or spreads.
 //
-// Simplification: retail chains the six in a random loop, which the NA conga then sorts by
-// priority. Here the loop already is that conga order, so the bots and the player resolve it
-// alike.
+// The simulation uses one fixed tether loop in starting-ring order instead of modeling each
+// possible random tether assignment.
 public sealed class FruP2LightRampantState
 {
     public const float CursesAt = 18.75f;
@@ -24,6 +23,9 @@ public sealed class FruP2LightRampantState
     public const int HammerWaves = 5;
     public const float TowerRadius = 4f;
 
+    private static readonly PartyRole[] TetherOrder =
+        [PartyRole.RegenHealer, PartyRole.ShieldHealer, PartyRole.MainTank, PartyRole.OffTank,
+         PartyRole.CasterDps, PartyRole.PhysRangedDps, PartyRole.MeleeDpsB, PartyRole.MeleeDpsA];
     private static readonly PartyRole[] PuddlePriority =
         [PartyRole.PhysRangedDps, PartyRole.RegenHealer, PartyRole.CasterDps, PartyRole.ShieldHealer,
          PartyRole.MeleeDpsA, PartyRole.MainTank, PartyRole.MeleeDpsB, PartyRole.OffTank];
@@ -51,11 +53,7 @@ public sealed class FruP2LightRampantState
         Pairs = overrides.Pairs ?? rng.NextBool();
         SupportPairs = overrides.SupportPairs ?? rng.NextBool();
 
-        var north = new[] { PartyRole.OffTank, PartyRole.MainTank, PartyRole.ShieldHealer, PartyRole.RegenHealer }.Except(puddles).ToList();
-        var south = new[] { PartyRole.PhysRangedDps, PartyRole.CasterDps, PartyRole.MeleeDpsA, PartyRole.MeleeDpsB }.Except(puddles).ToList();
-        if (north.Count == 4) { south.Add(north[0]); north.RemoveAt(0); }
-        if (south.Count == 4) { north.Add(south[0]); south.RemoveAt(0); }
-        slots = [.. north, .. south, .. puddles];
+        slots = [.. TetherOrder.Where(role => !puddles.Contains(role)), .. puddles];
     }
 
     public PartyRole Slot(int index) => slots[index];
