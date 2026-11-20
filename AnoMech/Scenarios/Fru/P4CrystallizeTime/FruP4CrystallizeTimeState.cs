@@ -13,8 +13,8 @@ public enum CrystallizeDebuff { RedAero, RedIce, BlueEruption, BlueIce, BlueDark
 
 public enum CrystallizeCorner { NW, NE, SE, SW }
 
-// The debuffs, which hourglass pair is slowed, the corner the Tidal Light waves leave safe last,
-// three Quietus carriers and the Spirit Taker target.
+// The debuffs, their Wyrmfang marker order, which hourglass pair is slowed, the corner the Tidal
+// Light waves leave safe last, three Quietus carriers and the Spirit Taker target.
 public sealed class FruP4CrystallizeTimeState
 {
     public const float DebuffsAt = 11.8f;
@@ -35,6 +35,7 @@ public sealed class FruP4CrystallizeTimeState
 
     public bool SlowNorthwest { get; }
     public CrystallizeCorner Corner { get; }
+    public IReadOnlyList<PartyRole> WyrmfangMarkOrder { get; }
     public IReadOnlyList<PartyRole> Quietus { get; }
     public PartyRole SpiritTakerTarget { get; }
 
@@ -55,6 +56,7 @@ public sealed class FruP4CrystallizeTimeState
         if (overrides.Corner is { } corner) Corner = corner;
         Quietus = overrides.Quietus ?? rng.Shuffle(Enum.GetValues<PartyRole>()).Take(3).ToList();
         SpiritTakerTarget = overrides.SpiritTakerTarget ?? rng.NextRole();
+        WyrmfangMarkOrder = rng.Shuffle(Enum.GetValues<PartyRole>().Where(role => !IsRed(debuffs[role])));
     }
 
     public CrystallizeDebuff Debuff(PartyRole role) => debuffs[role];

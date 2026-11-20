@@ -1,4 +1,5 @@
 using AnoMech.Core.Game.Party;
+using AnoMech.Core.Native.Interfaces;
 using AnoMech.Scenarios;
 using AnoMech.Scenarios.Fru.P4CrystallizeTime;
 using static AnoMech.Core.Game.Party.PartyRole;
@@ -157,4 +158,49 @@ public class FruP4CrystallizeTimeScenarioTests
         => Crystallize(RegenHealer)
             .TeleportAt(25.7f, to: new(0, -13))
             .ShouldFail();
+
+    [Test]
+    public void ManaStratMarksWyrmfangHoldersWithAttackOneThroughFour()
+    {
+        SimTimeline? timeline = null;
+        var entityIds = new Dictionary<PartyRole, uint>();
+        var debuffs = new Dictionary<PartyRole, CrystallizeDebuff>
+        {
+            [MainTank] = CrystallizeDebuff.RedAero,
+            [OffTank] = CrystallizeDebuff.RedIce,
+            [RegenHealer] = CrystallizeDebuff.BlueEruption,
+            [ShieldHealer] = CrystallizeDebuff.BlueWater,
+            [MeleeDpsA] = CrystallizeDebuff.RedAero,
+            [MeleeDpsB] = CrystallizeDebuff.RedIce,
+            [PhysRangedDps] = CrystallizeDebuff.BlueIce,
+            [CasterDps] = CrystallizeDebuff.BlueDarkness,
+        };
+        var run = ScenarioRun.Execute(typeof(FruP4CrystallizeTimeScenario), 1, 21, new ScenarioRunOptions
+        {
+            PlayerRole = ShieldHealer,
+            StopAt = 12.2f,
+            Overrides = o => ((FruP4CrystallizeTimeStateOverrides)o).Debuffs = debuffs,
+            Probe = p =>
+            {
+                timeline ??= ((FakeBattleCharas)Natives.BattleCharas).Timeline;
+                foreach (var role in Enum.GetValues<PartyRole>())
+                    entityIds.TryAdd(role, p.Member(role)!.EntityId);
+            },
+        });
+
+        var marks = timeline!.Rows
+            .Where(row => row["kind"] == "ac_target" && row["id"] == "0x1F6" && row["target"].Length > 0)
+            .ToArray();
+        var markedEntities = marks.Select(row => uint.Parse(row["target"], System.Globalization.NumberStyles.HexNumber));
+        var expectedEntities = debuffs.Where(entry => !FruP4CrystallizeTimeState.IsRed(entry.Value))
+            .Select(entry => entityIds[entry.Key]);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(run.Failure, Is.Null);
+            Assert.That(marks, Has.Length.EqualTo(4));
+            Assert.That(markedEntities, Is.EquivalentTo(expectedEntities));
+            Assert.That(marks.Select(row => row["p"].Split(',')[0]), Is.EquivalentTo(["0x0", "0x1", "0x2", "0x3"]));
+        });
+    }
 }
