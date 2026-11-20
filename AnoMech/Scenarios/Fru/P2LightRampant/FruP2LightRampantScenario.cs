@@ -19,7 +19,7 @@ public sealed class FruP2LightRampantScenario : IScenario
     public string Name => "Light Rampant";
     public IPhase Phase => FruZone.P2;
 
-    public IReadOnlyList<IScenarioAi> AiStrats => [new FruP2LightRampantAi()];
+    public IReadOnlyList<IScenarioAi> AiStrats => [new FruP2LightRampantAi(), new FruP2LightRampantManaAi()];
 
     public void DrawSettings() => settingsWindow.Draw();
     public void DrawPerPlayerSettings() => settingsWindow.DrawPerPlayer();
