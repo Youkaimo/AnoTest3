@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   build:
-    uses: anomek/MyDalamudPlugins/.github/workflows/build-plugin.yml@master
+    uses: Youkaimo/MyDalamudPlugins/.github/workflows/build-plugin.yml@master
     with:
       internal_name: AnoMech
       solution_name: AnoMech
