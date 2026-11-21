@@ -37,6 +37,8 @@ public sealed class FruP3UltimateRelativityState
     public int North { get; }
     public int ClockwiseMask { get; }
     public PartyRole ShellCrusherTarget { get; }
+    public IReadOnlyList<PartyRole> ShortDpsMarkOrder { get; }
+    public IReadOnlyList<PartyRole> LongSupportMarkOrder { get; }
 
     public FruP3UltimateRelativityState(Rng rng, FruP3UltimateRelativityStateOverrides overrides)
     {
@@ -62,6 +64,8 @@ public sealed class FruP3UltimateRelativityState
             darkness[wave] = overrides.Darkness?[wave] ?? valid[rng.Next(valid.Length)];
         }
         ShellCrusherTarget = overrides.ShellCrusherTarget ?? rng.NextRole();
+        ShortDpsMarkOrder = rng.Shuffle(Enum.GetValues<PartyRole>().Where(role => debuffs[role] == RelativityDebuff.ShortDps));
+        LongSupportMarkOrder = rng.Shuffle(Enum.GetValues<PartyRole>().Where(role => debuffs[role] == RelativityDebuff.LongSupport));
     }
 
     public RelativityDebuff Debuff(PartyRole role) => debuffs[role];
