@@ -16,6 +16,8 @@ public class FruP4DarklitDragonsongManaAiTests
     [TestCase(2, false)]
     public void ManaLineupAndBowtieBoxHourglassResolveCleanly(int shape, bool eastWing)
     {
+        Dictionary<PartyRole, Vector3>? akhRhaiBait = null;
+        Dictionary<PartyRole, Vector3>? akhRhaiDodge = null;
         Dictionary<PartyRole, Vector3>? lineup = null;
         Dictionary<PartyRole, Vector3>? towers = null;
         Dictionary<PartyRole, Vector3>? akhMorn = null;
@@ -38,6 +40,10 @@ public class FruP4DarklitDragonsongManaAiTests
                 },
                 Probe = probe =>
                 {
+                    if (probe.Crossed(6.55f))
+                        akhRhaiBait = Enum.GetValues<PartyRole>().ToDictionary(role => role, role => probe.Member(role)!.Position);
+                    if (probe.Crossed(9.5f))
+                        akhRhaiDodge = Enum.GetValues<PartyRole>().ToDictionary(role => role, role => probe.Member(role)!.Position);
                     if (probe.Crossed(24.1f))
                         lineup = Enum.GetValues<PartyRole>().ToDictionary(role => role, role => probe.Member(role)!.Position);
                     if (probe.Crossed(TowersAt - 0.1f))
@@ -50,6 +56,14 @@ public class FruP4DarklitDragonsongManaAiTests
         Assert.That(run.Passed, Is.True, run.ToString());
         Assert.Multiple(() =>
         {
+            Assert.That(Vector3.Distance(akhRhaiBait![MainTank], new Vector3(-7.07f, 0, -7.07f)), Is.LessThan(1f));
+            foreach (var role in new[] { OffTank, RegenHealer, ShieldHealer, MeleeDpsA, MeleeDpsB, PhysRangedDps, CasterDps })
+                Assert.That(Vector3.Distance(akhRhaiBait[role], new Vector3(7.07f, 0, -7.07f)), Is.LessThan(1f));
+
+            Assert.That(akhRhaiDodge![MainTank].Z, Is.GreaterThan(5f));
+            foreach (var role in new[] { OffTank, RegenHealer, ShieldHealer, MeleeDpsA, MeleeDpsB, PhysRangedDps, CasterDps })
+                Assert.That(akhRhaiDodge[role].Length(), Is.LessThan(1.5f));
+
             Assert.That(lineup![MeleeDpsA].X, Is.LessThan(lineup[MeleeDpsB].X));
             Assert.That(lineup[MeleeDpsB].X, Is.LessThan(lineup[PhysRangedDps].X));
             Assert.That(lineup[PhysRangedDps].X, Is.LessThan(lineup[CasterDps].X));

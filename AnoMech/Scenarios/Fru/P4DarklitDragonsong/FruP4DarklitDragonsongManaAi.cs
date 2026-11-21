@@ -34,8 +34,8 @@ public sealed class FruP4DarklitDragonsongManaAi(bool playerBaitsSomberDance) : 
         postWaterSwap = SwapFreeWaterToOtherSide(preWaterSwap);
         somberTank = ChooseSomberTank();
         var ai = new AiManager(world);
-        ai.Move(2f, () => ByRole(Middle), arrivalTime: 6.6f);
-        ai.Move(6.65f, () => ByRole(OpeningSpread), arrivalTime: 8.8f);
+        ai.Move(2f, () => ByRole(OpeningBait), arrivalTime: 6.6f);
+        ai.Move(6.65f, () => ByRole(OpeningDodge), arrivalTime: 8.8f);
         ai.Move(14.5f, () => ByRole(Lineup), arrivalTime: 24.2f);
         ai.Move(24.2f, () => ByRole(role => Bowtie(role, preWaterSwap)), arrivalTime: 28.2f);
         ai.Move(28.2f, () => ByRole(role => Bowtie(role, postWaterSwap)), arrivalTime: TowersAt);
@@ -122,17 +122,11 @@ public sealed class FruP4DarklitDragonsongManaAi(bool playerBaitsSomberDance) : 
 
     private static Vector3? Middle(PartyRole role) => FromSim((int)role % 2 * 0.3f, (int)role * 0.08f);
 
-    private static Vector3? OpeningSpread(PartyRole role) => role switch
-    {
-        PartyRole.MainTank => FromSim(16.4f, 10.1f),
-        PartyRole.OffTank => FromSim(10.1f, 16.4f),
-        PartyRole.RegenHealer => FromSim(10.1f, -16.4f),
-        PartyRole.ShieldHealer => FromSim(16.4f, -10.1f),
-        PartyRole.MeleeDpsA => FromSim(-10.1f, -16.4f),
-        PartyRole.MeleeDpsB => FromSim(-16.4f, -10.1f),
-        PartyRole.PhysRangedDps => FromSim(-16.4f, 10.1f),
-        _ => FromSim(-10.1f, 16.4f),
-    };
+    private static Vector3? OpeningBait(PartyRole role)
+        => (role == PartyRole.MainTank ? new Vector3(-7.07f, 0, -7.07f) : new Vector3(7.07f, 0, -7.07f)) + Middle(role)!.Value * 0.5f;
+
+    private static Vector3? OpeningDodge(PartyRole role)
+        => role == PartyRole.MainTank ? new Vector3(0, 0, 7f) : Middle(role)!.Value;
 
     private static Vector3? Lineup(PartyRole role) => role switch
     {
