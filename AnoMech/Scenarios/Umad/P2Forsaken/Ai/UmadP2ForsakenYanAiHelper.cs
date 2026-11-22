@@ -232,4 +232,32 @@ public sealed class UmadP2ForsakenYanAiHelper
     public static void KroxyReorder(UmadP2ForsakenYanAiHelper helper, int index, IList<PartyRole> active)
     {
     }
+
+    public static void SouthAdjustReorder(UmadP2ForsakenYanAiHelper helper, int index, IList<PartyRole> active)
+    {
+        if (index % 2 == 0)
+        {
+            List<PartyRole> reordered =
+            [
+                helper.ActiveRole(LockonId.ForsakenStack, index, 0),
+                helper.ActiveRole(LockonId.ForsakenCone, index, 0),
+                helper.ActiveRole(LockonId.ForsakenChariot, index, 0),
+                helper.ActiveRole(LockonId.ForsakenStack, index, 1)
+            ];
+            active.Clear();
+            reordered.ForEach(active.Add);
+        }
+        else
+        {
+            List<PartyRole> reordered =
+            [
+                helper.ActiveRole(LockonId.ForsakenCone, index, 0),
+                helper.ActiveRole(LockonId.ForsakenChariot, index, 0),
+                helper.ActiveRole(LockonId.ForsakenChariot, index, 1),
+                helper.ActiveRole(LockonId.ForsakenCone, index, 1)
+            ];
+            active.Clear();
+            reordered.ForEach(active.Add);
+        }
+    }
 }
